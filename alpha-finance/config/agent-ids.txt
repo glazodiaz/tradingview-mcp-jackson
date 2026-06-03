@@ -1,0 +1,6 @@
+CEO: 12c84629-15df-4b85-a73d-14ca3e084982
+Research Agent: 8f9f4e43-e1cb-4972-a68b-3dc838069249
+Backtest Agent: d4977376-eab1-4a87-b8fb-0acabd5c74e2
+Risk Management Agent: 1f2575ba-6f71-41f7-9d6f-d24e3b162d14
+Execution Agent: 3dc49659-7af3-4022-ab48-2758dba0d831
+Cost Optimizer: 9995518a-b257-4c18-8943-0e652d9e8a7f

@@ -1,0 +1,7 @@
+{
+  "sharpe_minimum": 1.5,
+  "max_drawdown_pct": 15,
+  "paper_trading_default": true,
+  "live_trading_requires_board_approval": true,
+  "note": "Only the Board (the human) can modify these thresholds."
+}
