@@ -1,65 +1,359 @@
 {
-  "watchlist": ["BTCUSDT"],
-  "default_timeframe": "1",
-
-  "strategy": {
-    "name": "10-Second Momentum Scalper",
+  "meta": {
+    "title": "BB-Terminal Day Trading Rules",
+    "version": "1.0",
+    "generated": "2026-06-04",
+    "category": "Cat2 — Day Trading",
+    "account_size": 10000,
+    "description": "Consensus rules derived from 5 top trading YouTubers with verified results. Applied to Mag8 universe (TSLA, AAPL, MSFT, AMZN, GOOGL, META, NVDA, SPCX).",
     "sources": [
-      "Price momentum — buy if last close > previous close (green candle)",
-      "RSI filter — only trade when RSI is not at an extreme (30–70 range)"
-    ],
-    "primary_timeframes": [
-      "1-minute (signal source)",
-      "10-second execution loop"
+      {
+        "trader": "Ross Cameron",
+        "channel": "Warrior Trading",
+        "subscribers": "2M+",
+        "specialty": "Momentum trading, low-float breakouts, small account scaling",
+        "verified_pnl": "$18.8M since 2017 from $583 starting account"
+      },
+      {
+        "trader": "Rayner Teo",
+        "channel": "TradingwithRayner",
+        "subscribers": "2.2M+",
+        "specialty": "Price action, trend following, risk management, trading psychology"
+      },
+      {
+        "trader": "Adam Khoo",
+        "channel": "Adam Khoo",
+        "subscribers": "1M+",
+        "specialty": "Technical + fundamental analysis, structured setups, smart money"
+      },
+      {
+        "trader": "Humbled Trader (Shay)",
+        "channel": "Humbled Trader",
+        "specialty": "Large-cap day trading, catalyst-based entries, discipline & longevity rules"
+      },
+      {
+        "trader": "Meir Barak",
+        "channel": "Tradenet Day Trading Academy",
+        "specialty": "Pre-market analysis, intraday management, systematic trade tracking"
+      }
     ]
   },
 
-  "indicators": {
-    "rsi_14": "Momentum filter. Only trade when RSI is between 30–70 (avoid extremes).",
-    "price_momentum": "Compare last close vs previous close. Up = long signal. Down = short signal."
+  "account": {
+    "paper_capital": 10000,
+    "max_risk_per_trade_pct": 1.0,
+    "max_risk_per_trade_dollars": 100,
+    "daily_loss_limit_pct": 3.0,
+    "daily_loss_limit_dollars": 300,
+    "daily_profit_target_pct": 2.0,
+    "daily_profit_target_dollars": 200,
+    "max_open_positions": 2,
+    "comment": "Ross Cameron: never risk more than you can afford to lose in a day. Meir Barak challenge rules: $10K account, $300 max daily loss, close all by EOD."
   },
 
-  "bias_criteria": {
-    "bullish": [
-      "Last 1-min candle closed higher than the one before it",
-      "RSI is between 30 and 70"
+  "session_rules": {
+    "pre_market_start": "08:00",
+    "trading_window_open": "09:30",
+    "prime_window_close": "11:30",
+    "afternoon_window_open": "13:30",
+    "afternoon_window_close": "15:45",
+    "hard_close_all": "15:55",
+    "timezone": "ET",
+    "comment": "Ross Cameron + Humbled Trader: highest volume and best setups occur 9:30–11:30 AM. Adam Khoo: avoid trading the 11:30–1:30 dead zone. All 5 traders: NEVER hold positions overnight in day trading mode."
+  },
+
+  "pre_market_checklist": {
+    "required_steps": [
+      "Check pre-market news for each Mag8 ticker",
+      "Identify stocks with earnings, FDA, macro catalyst",
+      "Note pre-market gap-up or gap-down > 1%",
+      "Mark prior day high (PDH), prior day low (PDL), and prior day close",
+      "Identify key support and resistance levels on 5-min and daily chart",
+      "Check overall market bias: SPY pre-market direction",
+      "Set alerts at key levels before open",
+      "Write trade plan: what setup triggers entry, what price is the stop, what is the target"
     ],
-    "bearish": [
-      "Last 1-min candle closed lower than the one before it",
-      "RSI is between 30 and 70"
+    "comment": "Meir Barak: pre-trade analysis is non-negotiable. Humbled Trader: if you don't have a plan before open, you're reacting — not trading."
+  },
+
+  "setup_rules": {
+    "approved_setups": [
+      {
+        "name": "Opening Range Breakout (ORB)",
+        "description": "Price breaks above or below the high/low of the first 5 or 15 minutes after open",
+        "entry": "Buy breakout candle close or retest of breakout level",
+        "timeframe": "5-min chart",
+        "volume_requirement": "Breakout candle volume > 2x average",
+        "stop": "Below the opening range low (long) or above the opening range high (short)",
+        "target": "2:1 reward-to-risk minimum",
+        "source": "Ross Cameron, Humbled Trader"
+      },
+      {
+        "name": "Trend Continuation Pullback",
+        "description": "Stock is trending up (or down) on the daily. Enter on a pullback to a key moving average (9 EMA or 20 EMA) with continuation signal",
+        "entry": "Bullish candle rejecting the 9 EMA on 5-min chart during an uptrend",
+        "timeframe": "5-min chart, confirmed on 15-min",
+        "volume_requirement": "Volume increasing on continuation candle",
+        "stop": "Below the EMA that acted as support",
+        "target": "Prior high or 2:1 R:R",
+        "source": "Rayner Teo, Adam Khoo"
+      },
+      {
+        "name": "Catalyst Gap Fill",
+        "description": "Stock gaps down on news that does not change the fundamentals (e.g., earnings beat but weak guidance). Buy the gap fill as sellers exhaust.",
+        "entry": "After a clear base forms and volume dries up — first green candle after base",
+        "timeframe": "5-min chart",
+        "volume_requirement": "Volume contraction on base, expansion on reversal candle",
+        "stop": "Below the base low",
+        "target": "Gap fill level or 2:1 R:R",
+        "source": "Humbled Trader, Adam Khoo",
+        "example": "AVGO gap-down on earnings beat but weak guidance — setup seen June 4 2026"
+      },
+      {
+        "name": "VWAP Reclaim",
+        "description": "Stock dips below VWAP and reclaims it with increasing volume — institutional buying signal",
+        "entry": "First 5-min candle close above VWAP after failed attempt to break lower",
+        "timeframe": "5-min chart",
+        "volume_requirement": "Reclaim candle > average volume",
+        "stop": "Below VWAP on entry candle",
+        "target": "Prior resistance or 2:1 R:R",
+        "source": "Ross Cameron, Humbled Trader, Meir Barak"
+      },
+      {
+        "name": "Support/Resistance Bounce",
+        "description": "Price reaches a known key level (prior high, round number, daily support) and shows rejection",
+        "entry": "Reversal candle pattern at support (hammer, engulfing) on 5-min",
+        "timeframe": "5-min chart, key level from daily",
+        "volume_requirement": "Rejection candle has above-average volume",
+        "stop": "Below the rejection candle low",
+        "target": "Next resistance level, minimum 2:1 R:R",
+        "source": "Rayner Teo, Adam Khoo, Meir Barak"
+      }
     ],
-    "neutral": [
-      "RSI is above 70 (overbought — skip)",
-      "RSI is below 30 (oversold — skip)",
-      "Candle close change is less than 0.05% (chop — skip)"
+    "forbidden_setups": [
+      "Entering a trade with no clear stop loss level",
+      "Chasing a stock that has already moved 3%+ without a pullback",
+      "Trading based on tips, social media, or news alone without a technical entry signal",
+      "Trading during the 11:30 AM – 1:00 PM dead zone (low volume, choppy)",
+      "Adding to a losing position (averaging down)"
     ]
   },
 
   "entry_rules": {
-    "long": [
-      "Last close > previous close by at least 0.05%",
-      "RSI between 30 and 70",
-      "Enter market buy immediately"
+    "minimum_reward_to_risk": 2.0,
+    "entry_confirmation_required": true,
+    "confirmation_signals": [
+      "Volume spike on entry candle (> 1.5x average)",
+      "Price above VWAP for long entries",
+      "Price below VWAP for short entries",
+      "At least one higher timeframe (15-min) in agreement with trade direction",
+      "No major resistance within 0.5% of entry price"
     ],
-    "short": [
-      "Last close < previous close by at least 0.05%",
-      "RSI between 30 and 70",
-      "Enter market sell immediately"
+    "max_spread_allowed_pct": 0.1,
+    "comment": "All 5 traders agree: no trade without confirmation. Rayner Teo: 'The entry is the least important part — risk management is everything.' Ross Cameron: wait for the setup to come to you."
+  },
+
+  "position_sizing": {
+    "formula": "shares = max_risk_dollars / (entry_price - stop_price)",
+    "max_risk_per_trade_dollars": 100,
+    "example": {
+      "entry": 419.00,
+      "stop": 415.00,
+      "risk_per_share": 4.00,
+      "shares": 25,
+      "total_risk": 100,
+      "ticker": "TSLA example"
+    },
+    "never_exceed_account_pct_per_trade": 20,
+    "comment": "Rayner Teo: risk 1% per trade. Ross Cameron: position size based on stop distance, not a fixed share count. Meir Barak: know your exact dollar risk before entering."
+  },
+
+  "stop_loss_rules": {
+    "stop_required": true,
+    "stop_set_before_entry": true,
+    "types": {
+      "hard_stop": {
+        "description": "Fixed price stop — placed as a stop order immediately at entry",
+        "when_to_use": "All trades"
+      },
+      "mental_stop": {
+        "description": "NOT allowed — leads to hesitation and larger losses",
+        "allowed": false,
+        "comment": "All 5 traders agree: mental stops are how beginners blow up accounts"
+      },
+      "trailing_stop_intraday": {
+        "description": "Once trade is up 1.5x R, move stop to breakeven. Once up 2x R, trail at 1x R.",
+        "when_to_use": "Strong momentum moves"
+      }
+    },
+    "stop_move_rule": "Stop can only move in your favor — NEVER widen a stop to avoid being stopped out",
+    "comment": "Humbled Trader: 'The moment you move your stop against yourself, you're no longer trading — you're gambling.' All 5 agree."
+  },
+
+  "profit_taking_rules": {
+    "minimum_target": "2:1 reward-to-risk",
+    "partial_exit_strategy": {
+      "first_target": "Sell 50% of position at 1.5x R",
+      "move_stop_to_breakeven": true,
+      "second_target": "Let remaining 50% run to 3x R or trail with 5-min swing lows"
+    },
+    "full_exit_signals": [
+      "Price reaches resistance level",
+      "Volume drops sharply on continuation attempt",
+      "Large bearish reversal candle",
+      "Time rule: 15 minutes before market close — exit all"
+    ],
+    "comment": "Ross Cameron: take partial profits early to remove pressure. Rayner Teo: 'Let your profits run but protect your capital first.'"
+  },
+
+  "daily_management_rules": {
+    "max_trades_per_day": 5,
+    "stop_trading_if": [
+      "Daily loss limit of -$300 hit — close everything, no more trades today",
+      "3 consecutive losing trades — take a break, reassess",
+      "Emotional state is not calm — frustration, revenge trading impulse, overconfidence",
+      "Market is choppy with no clear trend (measured by SPY whipsawing)"
+    ],
+    "end_of_day_required": [
+      "Close ALL positions by 3:55 PM ET — no exceptions",
+      "Log every trade: entry, exit, P&L, what setup, what worked, what failed",
+      "Review chart replay of the day's trades",
+      "Grade your discipline: did you follow rules? (Y/N for each rule)"
+    ],
+    "comment": "Meir Barak challenge rule: all positions closed by EOD, no overnight holds. Humbled Trader: the log is your feedback loop — traders who journal improve, those who don't stay stuck."
+  },
+
+  "psychology_rules": {
+    "rules": [
+      {
+        "rule": "Trade the plan, not the emotion",
+        "detail": "If a setup is valid by your rules, take it. If not, sit on hands. No exceptions.",
+        "source": "All 5 traders"
+      },
+      {
+        "rule": "No revenge trading",
+        "detail": "After a loss, wait at least 15 minutes before taking another trade. Never increase size to recover losses faster.",
+        "source": "Humbled Trader, Ross Cameron"
+      },
+      {
+        "rule": "No FOMO entries",
+        "detail": "If you missed the breakout, let it go. The market will give you another setup. Chasing leads to buying tops.",
+        "source": "Rayner Teo, Adam Khoo"
+      },
+      {
+        "rule": "Accept losses as the cost of doing business",
+        "detail": "Even a 60% win rate means 4 out of 10 trades lose. Losses are expected. The goal is that winners are bigger than losers.",
+        "source": "All 5 traders"
+      },
+      {
+        "rule": "Size down when losing, never up",
+        "detail": "If you've had 2 consecutive losers, cut your size in half for the next trade. Rebuild confidence with small wins.",
+        "source": "Ross Cameron, Meir Barak"
+      },
+      {
+        "rule": "Pre-trade mental check",
+        "detail": "Before any trade ask: Do I have a clear setup? Do I know my exact stop? Is my R:R at least 2:1? Am I in a calm emotional state? If any answer is No — do not trade.",
+        "source": "Adam Khoo, Humbled Trader, Rayner Teo"
+      }
     ]
   },
 
-  "exit_rules": [
-    "Exit automatically after 10 seconds (next loop tick closes previous position)",
-    "No manual exit management — pure time-based scalp"
-  ],
+  "technical_indicators": {
+    "primary": [
+      "VWAP — Volume Weighted Average Price (intraday baseline)",
+      "9 EMA — fast trend reference on 5-min chart",
+      "20 EMA — medium trend reference on 5-min chart",
+      "Volume (compared to average) — confirms conviction"
+    ],
+    "secondary": [
+      "Daily chart support and resistance levels",
+      "Prior day high and low",
+      "Round numbers ($100, $200, $300, etc.) — act as psychological levels",
+      "RSI — only used to confirm overbought/oversold, never as standalone signal"
+    ],
+    "avoid": [
+      "Relying on any single indicator alone",
+      "Using more than 4-5 indicators simultaneously (analysis paralysis)",
+      "Lagging indicators for entry timing — use price action + volume primarily"
+    ],
+    "comment": "Rayner Teo: price action + volume is the foundation. Indicators are filters, not signals."
+  },
 
-  "risk_rules": [
-    "Fixed trade size: 1% of portfolio per trade",
-    "Maximum trade size: $3.00",
-    "Maximum 6 trades per 60-second run",
-    "No stop loss — exit is time-based at next tick",
-    "For demo purposes only — minimum BitGet order size may apply"
-  ],
+  "mag8_specific_rules": {
+    "universe": ["TSLA", "AAPL", "MSFT", "AMZN", "GOOGL", "META", "NVDA", "SPCX"],
+    "why_this_universe": "High liquidity, tight spreads, institutional coverage, momentum characteristics. Known behavior reduces surprises.",
+    "stock_specific_notes": {
+      "TSLA": "Most volatile of the group. Wider stops acceptable. Best for ORB and momentum setups.",
+      "NVDA": "AI momentum leader. Gaps frequently on news. Best for catalyst gap-fill setups.",
+      "AAPL": "Tends to be slower, more range-bound intraday. Best for support/resistance bounce.",
+      "MSFT": "Steadier mover. Good for VWAP reclaim setups.",
+      "AMZN": "High priced, wide range. Position size accordingly.",
+      "GOOGL": "Near partial exit trigger $402.52 in Cat1 — watch for correlation with Cat2.",
+      "META": "Volatile around earnings. Avoid entering ahead of major announcements.",
+      "SPCX": "New IPO — apply extra caution first 30 days. High volatility expected."
+    },
+    "correlation_with_cat1": "If a Cat1 trailing stop is near being triggered, do not add a Cat2 short-term position in the same stock — direction conflict.",
+    "comment": "Trade what you know. Staying in the Mag8 universe means you develop deep familiarity with how each stock moves."
+  },
 
-  "notes": "Demo strategy for YouTube video. Runs 6 trades over 60 seconds, one every 10 seconds. Signal is simple price momentum on 1-min candles with RSI sanity check."
+  "cat2_integration": {
+    "capital": 10000,
+    "paper_trading_first": true,
+    "go_live_criteria": [
+      "2 consecutive profitable weeks in paper trading",
+      "Win rate above 50% on at least 20 trades",
+      "Average R:R on winners above 2.0",
+      "Zero days exceeding daily loss limit",
+      "Trade journal complete for all paper trades"
+    ],
+    "starting_position_for_paper": {
+      "TSLA": {"shares": 1, "entry_ref": 419.00},
+      "NVDA": {"shares": 1, "entry_ref": 216.00},
+      "AVGO": {"shares": 1, "entry_ref": 407.00}
+    },
+    "max_risk_per_trade_dollars": 10,
+    "daily_loss_limit_dollars": 30,
+    "comment": "Started June 4, 2026. Paper only. Rules are identical to live — discipline practiced now carries over to real money."
+  },
+
+  "performance_tracking": {
+    "metrics_to_log_per_trade": [
+      "date_time",
+      "ticker",
+      "setup_name",
+      "entry_price",
+      "stop_price",
+      "target_price",
+      "exit_price",
+      "shares",
+      "risk_dollars",
+      "profit_loss_dollars",
+      "profit_loss_r_multiple",
+      "trade_duration_minutes",
+      "followed_rules_yn",
+      "notes"
+    ],
+    "weekly_review_questions": [
+      "What was my win rate this week?",
+      "What was my average R:R on winning trades?",
+      "Did I exceed the daily loss limit on any day?",
+      "Which setup performed best?",
+      "What was my biggest mistake and how do I prevent it?",
+      "Was my position sizing consistent with rules?"
+    ],
+    "comment": "Meir Barak + Humbled Trader: tracking is what separates professional traders from gamblers. You cannot improve what you do not measure."
+  },
+
+  "consensus_principles": {
+    "title": "The 7 Rules All 5 Traders Agree On",
+    "rules": [
+      "1. Always define your stop loss BEFORE entering any trade — risk first, reward second",
+      "2. Never risk more than 1-2% of account on a single trade",
+      "3. Minimum 2:1 reward-to-risk ratio — do not accept trades with lower potential",
+      "4. Cut losses quickly, let winners run (partial exit to lock gains, trail the rest)",
+      "5. Never add to a losing position — averaging down kills accounts",
+      "6. Keep a trade journal — review it weekly without exception",
+      "7. The market is always right — your job is to follow price, not predict it"
+    ]
+  }
 }
